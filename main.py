@@ -5,7 +5,6 @@ from slowapi.util import get_remote_address
 from slowapi.errors import RateLimitExceeded
 import shemas
 from overpass import rechercher_lieux_overpass
-import requests
 limiter = Limiter(key_func=get_remote_address)
 app = FastAPI()
 app.state.limiter = limiter
@@ -36,33 +35,3 @@ def rechercher_lieux(request:Request,demande: shemas.RechercheLieu):
         "lieux": resultats
     }
     
-@app.get("/test-reseau")
-def test_reseau():
-    resultats = {}
-    
-    sites_a_tester = {
-        "github": "https://api.github.com",
-        "google": "https://www.google.com",
-        "overpass": "https://overpass-api.de/api/interpreter"
-    }
-    
-    for nom, url in sites_a_tester.items():
-        try:
-            reponse = requests.get(url, timeout=10)
-            resultats[nom] = f"OK - status {reponse.status_code}"
-        except Exception as e:
-            resultats[nom] = f"ECHEC - {str(e)}"
-    
-    return resultats
-@app.get("/test-overpass-miroir")
-def test_overpass_miroir():
-    try:
-        reponse = requests.post(
-            "https://overpass.kumi.systems/api/interpreter",
-            data={"data": "[out:json];node[amenity=pharmacy](around:2000,6.3703,2.3912);out;"},
-            headers={"User-Agent": "ProxiApp/1.0 (contact@tonapp.com)"},
-            timeout=30
-        )
-        return {"status": reponse.status_code, "contenu": reponse.text[:300]}
-    except Exception as e:
-        return {"erreur": str(e)}    
