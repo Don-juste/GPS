@@ -11,6 +11,9 @@ class Categorie(str, Enum):
     SUPERMARCHE = "supermarche"
     BOULANGERIE = "boulangerie"
     ECOLE = "ecole"
+    BUVETTE = "buvette"
+    MARCHE = "marche"
+    LIEU_DE_CULTE = "lieu_de_culte"
 
 class Rayon(int, Enum):
     UN_KM = 1000
@@ -29,5 +32,9 @@ TAGS_OSM = {
     Categorie.BANQUE: "amenity=bank",
     Categorie.SUPERMARCHE: "shop=supermarket",
     Categorie.BOULANGERIE: "shop=bakery",
-    Categorie.ECOLE: "amenity=school"
+    Categorie.ECOLE: "amenity=school",
+    Categorie.BUVETTE: "amenity=bar",
+    Categorie.MARCHE: "amenity=marketplace",
+    Categorie.LIEU_DE_CULTE: "amenity=place_of_worship",
+
 }
