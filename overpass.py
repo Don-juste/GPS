@@ -1,4 +1,5 @@
 import requests
+import time
 from categories import Categorie, Rayon, TAGS_OSM
 from gelocalistaion import calculer_distance
 
@@ -16,17 +17,20 @@ def rechercher_lieux_overpass(latitude: float, longitude: float, categorie: Cate
         "User-Agent": "ProxiApp/1.0 (contact@tonapp.com)"
     }
 
-    reponse = requests.post(
-        "https://overpass-api.de/api/interpreter",
-        data={"data": requete_overpass},
-        headers=headers,
-        timeout=25
-    )
-
-    print("STATUS:", reponse.status_code)
+    reponse = None
+    for tentative in range(3):
+        reponse = requests.post(
+            "https://overpass-api.de/api/interpreter",
+            data={"data": requete_overpass},
+            headers=headers,
+            timeout=25
+        )
+        if reponse.status_code == 200:
+            break
+        time.sleep(2)
 
     if reponse.status_code != 200:
-        raise Exception("Erreur lors de la requête Overpass")
+        raise Exception(f"Erreur lors de la requête Overpass après 3 tentatives : {reponse.status_code}")
 
     resultats = reponse.json()["elements"]
 
