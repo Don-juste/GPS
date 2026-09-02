@@ -3,6 +3,11 @@ import time
 from categories import Categorie, Rayon, TAGS_OSM
 from gelocalistaion import calculer_distance
 
+URLS_OVERPASS = [
+    "https://overpass-api.de/api/interpreter",
+    "https://overpass.kumi.systems/api/interpreter"
+]
+
 def rechercher_lieux_overpass(latitude: float, longitude: float, categorie: Categorie, rayon: Rayon) -> list:
     tag = TAGS_OSM[categorie]
     cle, valeur = tag.split("=")
@@ -18,19 +23,20 @@ def rechercher_lieux_overpass(latitude: float, longitude: float, categorie: Cate
     }
 
     reponse = None
-    for tentative in range(3):
-        reponse = requests.post(
-            "https://overpass-api.de/api/interpreter",
-            data={"data": requete_overpass},
-            headers=headers,
-            timeout=25
-        )
-        if reponse.status_code == 200:
+    for url in URLS_OVERPASS:
+        for tentative in range(2):
+            try:
+                reponse = requests.post(url, data={"data": requete_overpass}, headers=headers, timeout=25)
+                if reponse.status_code == 200:
+                    break
+            except requests.exceptions.RequestException:
+                reponse = None
+            time.sleep(2)
+        if reponse is not None and reponse.status_code == 200:
             break
-        time.sleep(2)
 
-    if reponse.status_code != 200:
-        raise Exception(f"Erreur lors de la requête Overpass après 3 tentatives : {reponse.status_code}")
+    if reponse is None or reponse.status_code != 200:
+        raise Exception("Erreur lors de la requête Overpass, tous les serveurs ont échoué")
 
     resultats = reponse.json()["elements"]
 
