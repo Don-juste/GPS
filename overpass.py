@@ -16,12 +16,18 @@ def rechercher_lieux_overpass(latitude: float, longitude: float, categorie: Cate
         "User-Agent": "ProxiApp/1.0 (contact@tonapp.com)"
     }
 
-    reponse = requests.post(
-        "https://api.openstreetmap.fr/oapi/interpreter",
-        data={"data": requete_overpass},
-        headers=headers,
-        timeout=25
-    )
+    try:
+        reponse = requests.post(
+            "https://api.openstreetmap.fr/oapi/interpreter",
+            data={"data": requete_overpass},
+            headers=headers,
+            timeout=25
+        )
+        print(f"STATUS: {reponse.status_code}")
+        print(f"REPONSE: {reponse.text[:300]}")
+    except Exception as e:
+        print(f"ERREUR RESEAU: {e}")
+        raise Exception("Erreur lors de la requête Overpass")
 
     if reponse.status_code != 200:
         raise Exception("Erreur lors de la requête Overpass")
