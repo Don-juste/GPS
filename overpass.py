@@ -1,6 +1,6 @@
 import requests
 from categories import Categorie, Rayon, TAGS_OSM
-from geolocalisation import calculer_distance
+from gelocalistaion import calculer_distance
 
 def rechercher_lieux_overpass(latitude: float, longitude: float, categorie: Categorie, rayon: Rayon) -> list:
     tag = TAGS_OSM[categorie]
