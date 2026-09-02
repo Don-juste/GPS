@@ -53,4 +53,16 @@ def test_reseau():
         except Exception as e:
             resultats[nom] = f"ECHEC - {str(e)}"
     
-    return resultats    
+    return resultats
+@app.get("/test-overpass-miroir")
+def test_overpass_miroir():
+    try:
+        reponse = requests.post(
+            "https://overpass.kumi.systems/api/interpreter",
+            data={"data": "[out:json];node[amenity=pharmacy](around:2000,6.3703,2.3912);out;"},
+            headers={"User-Agent": "ProxiApp/1.0 (contact@tonapp.com)"},
+            timeout=30
+        )
+        return {"status": reponse.status_code, "contenu": reponse.text[:300]}
+    except Exception as e:
+        return {"erreur": str(e)}    
