@@ -17,7 +17,7 @@ def rechercher_lieux_overpass(latitude: float, longitude: float, categorie: Cate
     }
 
     reponse = requests.post(
-        "https://overpass-api.de/api/interpreter",
+        "https://api.openstreetmap.fr/oapi/interpreter",
         data={"data": requete_overpass},
         headers=headers,
         timeout=25
