@@ -27,15 +27,18 @@ def rechercher_lieux_overpass(latitude: float, longitude: float, categorie: Cate
         for tentative in range(2):
             try:
                 reponse = requests.post(url, data={"data": requete_overpass}, headers=headers, timeout=25)
+                print(f"URL: {url}, tentative {tentative+1}, STATUS: {reponse.status_code}")
                 if reponse.status_code == 200:
                     break
-            except requests.exceptions.RequestException:
+            except requests.exceptions.RequestException as e:
+                print(f"URL: {url}, tentative {tentative+1}, ERREUR RESEAU: {e}")
                 reponse = None
             time.sleep(2)
         if reponse is not None and reponse.status_code == 200:
             break
 
     if reponse is None or reponse.status_code != 200:
+        print("ECHEC FINAL : tous les serveurs ont échoué")
         raise Exception("Erreur lors de la requête Overpass, tous les serveurs ont échoué")
 
     resultats = reponse.json()["elements"]
