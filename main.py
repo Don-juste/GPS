@@ -4,7 +4,7 @@ from slowapi import Limiter, _rate_limit_exceeded_handler
 from slowapi.util import get_remote_address
 from slowapi.errors import RateLimitExceeded
 import shemas
-from overpass import rechercher_lieux_overpass
+from geoapify import rechercher_lieux_geoapify
 limiter = Limiter(key_func=get_remote_address)
 app = FastAPI()
 app.state.limiter = limiter
@@ -17,11 +17,13 @@ app.add_middleware(
     allow_headers=["*"]
 )
 
+
+
 @app.post("/recherche-lieux")
 @limiter.limit("10/minute")
-def rechercher_lieux(request:Request,demande: shemas.RechercheLieu):
+def rechercher_lieux(request: Request, demande: shemas.RechercheLieu):
     try:
-        resultats = rechercher_lieux_overpass(
+        resultats = rechercher_lieux_geoapify(
             demande.latitude,
             demande.longitude,
             demande.categorie,
@@ -33,5 +35,4 @@ def rechercher_lieux(request:Request,demande: shemas.RechercheLieu):
     return {
         "nombre_resultats": len(resultats),
         "lieux": resultats
-    }
-    
+    } 

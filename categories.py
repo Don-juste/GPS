@@ -22,19 +22,18 @@ class Rayon(int, Enum):
     DIX_KM = 10000
     VINGT_KM = 20000
 
-TAGS_OSM = {
-    Categorie.PHARMACIE: "amenity=pharmacy",
-    Categorie.RESTAURANT: "amenity=restaurant",
-    Categorie.MAQUIS: "amenity=bar",
-    Categorie.HOPITAL: "amenity=hospital",
-    Categorie.HOTEL: "tourism=hotel",
-    Categorie.STATION_SERVICE: "amenity=fuel",
-    Categorie.BANQUE: "amenity=bank",
-    Categorie.SUPERMARCHE: "shop=supermarket",
-    Categorie.BOULANGERIE: "shop=bakery",
-    Categorie.ECOLE: "amenity=school",
-    Categorie.BUVETTE: "amenity=bar",
-    Categorie.MARCHE: "amenity=marketplace",
-    Categorie.LIEU_DE_CULTE: "amenity=place_of_worship",
-
+TAGS_GEOAPIFY = {
+    Categorie.PHARMACIE: "healthcare.pharmacy",
+    Categorie.RESTAURANT: "catering.restaurant",
+    Categorie.MAQUIS: "catering.bar",
+    Categorie.HOPITAL: "healthcare.hospital",
+    Categorie.HOTEL: "accommodation.hotel",
+    Categorie.STATION_SERVICE: "service.vehicle.fuel",
+    Categorie.BANQUE: "service.financial.bank",
+    Categorie.SUPERMARCHE: "commercial.supermarket",
+    Categorie.BOULANGERIE: "commercial.food_and_drink.bakery",
+    Categorie.ECOLE: "education.school",
+    Categorie.BUVETTE: "catering.pub",
+    Categorie.MARCHE: "commercial.marketplace",
+    Categorie.LIEU_DE_CULTE: "religion.place_of_worship",
 }
